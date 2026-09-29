@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3F51B5"
+    android:backgroundTint="#3F51B5"
+    android:fillViewport="true"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2196F3"
+        android:orientation="vertical">
+
+        <TextView android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mi cuenta"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView android:textColor="@color/white"
+            android:id="@+id/account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:textIsSelectable="true" />
+
+        <TextView android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tu perfil y tus cartas se guardan en Firebase. Los cambios de cantidad se guardan automáticamente y aparecen en tus otros dispositivos. Necesitas conexión para modificar cantidades." />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Crear copia adicional"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/restore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Importar copia anterior"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/importLegacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Importar colección anterior"
+            android:visibility="gone"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Cerrar sesión"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/checkNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Comprobar notificaciones"
+            android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap" />
+
+        <ProgressBar
+            android:id="@+id/cloudProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView android:textColor="@color/white"
+            android:id="@+id/cloudStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite" />
+    </LinearLayout>
+</ScrollView>

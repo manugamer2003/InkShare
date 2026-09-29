@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Two adjacent margins form a 12dp gap. -->
+    <dimen name="button_half_gap">6dp</dimen>
+</resources>

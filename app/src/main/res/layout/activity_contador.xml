@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical"
+    android:background="#2196F3" android:padding="12dp">
+    <ScrollView android:id="@+id/counterSetup" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_vertical">
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Contador de lore" android:textSize="28sp" android:textColor="@color/white" android:textStyle="bold" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Modo de juego" android:textColor="@color/white" android:layout_marginTop="16dp" android:labelFor="@id/counterMode" />
+            <Spinner android:id="@+id/counterMode" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Jugadores · Pack Rush siempre es 1 contra 1" android:textColor="@color/white" android:labelFor="@id/counterPlayers" />
+            <Spinner android:id="@+id/counterPlayers" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" />
+            <CheckBox android:id="@+id/enableMatchTimer" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Usar temporizador" android:textColor="@color/white" android:checked="true" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Duración en minutos" android:textColor="@color/white" android:labelFor="@id/matchMinutes" />
+            <EditText android:id="@+id/matchMinutes" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="48dp" android:inputType="number" android:maxLength="3" android:text="55" android:textColor="@color/white" android:selectAllOnFocus="true" />
+            <Button android:id="@+id/startCounter" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Empezar partida" android:textColor="@color/white" android:background="@drawable/bg_boton_morado" android:layout_marginVertical="@dimen/button_half_gap" />
+            <Button android:id="@+id/resumeCounter" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Continuar partida guardada" android:textColor="@color/white" android:layout_marginVertical="@dimen/button_half_gap" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cada jugador ocupa una posición numerada en la mesa. Acordad quién es 1, 2, 3 o 4 antes de empezar: son los números que anunciará el audio del ganador. La partida se guarda en este móvil. Toca el nombre de un panel para cambiarlo." android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout android:id="@+id/counterGame" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical" android:visibility="gone">
+        <TextView android:id="@+id/counterHeading" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white" />
+        <TextView android:id="@+id/counterWinner" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/white" android:accessibilityLiveRegion="polite" android:visibility="gone" />
+        <LinearLayout android:id="@+id/timerBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginVertical="6dp">
+            <Button android:id="@+id/timerTime" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:paddingHorizontal="4dp" android:minHeight="48dp" android:textColor="@color/white" android:textSize="18sp" android:textAllCaps="false" android:layout_marginEnd="6dp" />
+            <Button android:id="@+id/timerPause" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:paddingHorizontal="4dp" android:minHeight="48dp" android:text="Pausar" android:textSize="12sp" android:textColor="@color/white" android:layout_marginHorizontal="6dp" />
+            <Button android:id="@+id/timerReset" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:paddingHorizontal="4dp" android:minHeight="48dp" android:text="Reiniciar tiempo" android:textSize="12sp" android:textColor="@color/white" android:layout_marginStart="6dp" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/counterBoard" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false">
+
+            <Button
+                android:id="@+id/undoCounter"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:minWidth="0dp"
+                android:text="Deshacer"
+                android:textColor="@color/white"
+                android:textSize="10sp" />
+            <Button android:id="@+id/resetCounter" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:text="Reiniciar" android:textColor="@color/white" android:layout_marginHorizontal="6dp" android:textSize="10sp"/>
+            <Button android:id="@+id/newCounter" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:text="Nueva" android:textColor="@color/white" android:layout_marginStart="6dp" android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button android:id="@+id/exitCounter" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Volver al inicio" android:textColor="@color/white" android:layout_marginVertical="@dimen/button_half_gap" />
+</LinearLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2196F3"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="InkShare"
+        android:textSize="36sp"
+        android:textStyle="bold" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:textSize="20sp" />
+
+    <Button android:textColor="@color/white"
+        android:id="@+id/openCollection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_boton_morado"
+        android:text="Catálogo y mi colección"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+    <Button android:textColor="@color/white"
+        android:id="@+id/openFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_boton_morado"
+        android:text="Mis amigos"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+    <Button android:textColor="@color/white"
+        android:id="@+id/openLoans"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_boton_morado"
+        android:text="Préstamos"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+    <Button android:id="@+id/openCounter" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Contador de partidas" android:textColor="@color/white" android:background="@drawable/bg_boton_morado"
+        android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" />
+
+    <Button android:textColor="@color/white"
+        android:id="@+id/openAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_boton_morado"
+        android:text="Mi cuenta y copia de seguridad"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+</LinearLayout>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Borde redondeado turquesa -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#143E43" />
+
+            <stroke
+                android:width="1dp"
+                android:color="#2196F3" />
+
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+    <!-- Línea morada inferior -->
+    <item
+        android:gravity="bottom"
+        android:height="3dp">
+
+        <shape android:shape="rectangle">
+            <solid android:color="#713BDB" />
+
+            <corners
+                android:bottomLeftRadius="10dp"
+                android:bottomRightRadius="10dp" />
+        </shape>
+    </item>
+
+</layer-list>

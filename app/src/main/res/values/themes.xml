@@ -1,0 +1,39 @@
+<resources>
+    <!-- Shared palette: independent of the device's light/dark setting. -->
+    <style name="Fixed.Theme.InkShare" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:textColorSecondaryInverse">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorLink">@color/white</item>
+        <item name="colorPrimary">#673AB7</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorOnTertiaryContainer">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="buttonBarPositiveButtonStyle">@style/InkShare.DialogButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/InkShare.DialogButton</item>
+        <item name="buttonBarNeutralButtonStyle">@style/InkShare.DialogButton</item>
+        <item name="tabStyle">@style/InkShare.Tabs</item>
+    </style>
+    <style name="InkShare.DialogButton" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <style name="InkShare.Tabs" parent="Widget.Material3.TabLayout">
+        <item name="tabTextColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+    <style name="Base.Theme.InkShare" parent="Fixed.Theme.InkShare" />
+    <style name="Theme.InkShare" parent="Base.Theme.InkShare" />
+</resources>

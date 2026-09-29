@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#14A2AB"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Amigos"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/myUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Envía una solicitud por nombre de usuario. Al aceptarla, ambos podréis ver vuestras colecciones. Los contactos antiguos necesitan amistad mutua para compartir."
+        android:textColor="#AEB304" />
+
+    <EditText
+        android:id="@+id/friendUsername"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_campo_usuario"
+        android:hint="Nombre de usuario"
+        android:inputType="textVisiblePassword"
+        android:maxLines="1"
+        android:paddingHorizontal="14dp"
+        android:textColor="@color/white"
+        android:textColorHint="#AAB7C4"
+        android:textSize="18sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addFriend"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="@dimen/button_half_gap"
+        android:layout_marginBottom="@dimen/button_half_gap"
+        android:background="@drawable/bg_boton_morado"
+        android:elevation="8dp"
+        android:text="Enviar solicitud"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:backgroundTint="@null" />
+
+    <ProgressBar
+        android:id="@+id/friendsProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/friendsStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite" />
+
+    <com.google.android.material.tabs.TabLayout android:id="@+id/friendTabs"
+        android:layout_width="match_parent" android:layout_height="wrap_content" app:tabMode="scrollable" />
+    <TextView android:id="@+id/emptyFriends" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="12dp" android:textColor="@color/white" />
+    <ListView
+        android:id="@+id/friendsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingHorizontal="0dp"
+        android:paddingVertical="4dp"
+        android:scrollbars="none" />
+</LinearLayout>

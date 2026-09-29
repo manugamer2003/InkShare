@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2196F3"
+    android:backgroundTint="#2196F3"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/collectionTitle"
+        android:text="Mi colección"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/syncStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite" />
+
+    <EditText android:textColor="@color/white"
+        android:id="@+id/search"
+        android:background="@drawable/bg_campo_usuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buscar nombre, edición o número"
+        android:inputType="text"
+        android:maxLines="1"
+        android:minHeight="48dp"
+        android:textSize="18sp" />
+
+    <Button android:textColor="@color/white"
+        android:id="@+id/toggleFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_boton_morado"
+        android:text="Filtros ▾ (0)"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+
+    <LinearLayout
+        android:id="@+id/filterPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Puedes marcar varias opciones por grupo. Sin selección, se muestran todas." />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+
+            <LinearLayout
+                android:id="@+id/filterOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/clearFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Limpiar filtros"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+        />
+    </LinearLayout>
+
+    <CheckBox android:textColor="@color/white"
+        android:id="@+id/onlyOwned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solo mis cartas" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/scanCamera"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:minWidth="0dp"
+            android:gravity="center"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Escáner en directo"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+            android:layout_marginEnd="@dimen/button_half_gap"
+        />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/scanGallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:minWidth="0dp"
+            android:gravity="center"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Abrir foto"     android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap"
+            android:layout_marginStart="@dimen/button_half_gap"
+        />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:indeterminate="true" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite" />
+
+    <TextView android:textColor="@color/white"
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="No hay cartas con esta selección. Revisa los filtros, la búsqueda o Solo mis cartas."
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/cardList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:dividerHeight="8dp" />
+</LinearLayout>

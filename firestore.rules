@@ -1,0 +1,259 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function googleUser() {
+      return request.auth != null && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    function owner(uid) { return googleUser() && request.auth.uid == uid; }
+    function validName(name) { return name is string && name.matches('[a-z0-9_]{3,20}'); }
+    function hasProfile() {
+      return googleUser() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+    function mutualFriend(uid) {
+      return hasProfile()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid)/friends/$(uid))
+        && exists(/databases/$(database)/documents/users/$(uid)/friends/$(request.auth.uid));
+    }
+    function acceptingFriend(uid, friendUid) {
+      let receiver = request.auth.uid;
+      let sender = uid == receiver ? friendUid : uid;
+      let senderName = get(/databases/$(database)/documents/users/$(sender)).data.username;
+      let receiverName = get(/databases/$(database)/documents/users/$(receiver)).data.username;
+      let requestId = senderName + ':' + receiverName;
+      let invitation = get(/databases/$(database)/documents/friendRequests/$(requestId)).data;
+      return (receiver == uid || receiver == friendUid)
+        && invitation.senderUid == sender && invitation.receiverUid == receiver
+        && !existsAfter(/databases/$(database)/documents/friendRequests/$(requestId))
+        && getAfter(/databases/$(database)/documents/users/$(friendUid)/friends/$(uid)).data.uid == uid
+        && getAfter(/databases/$(database)/documents/users/$(friendUid)/friends/$(uid)).data.createdAt == request.time;
+    }
+    function newFriendNotice(eventId) {
+      let e = request.resource.data;
+      let path = /databases/$(database)/documents/friendRequests/$(e.requestId);
+      let original = getAfter(path).data;
+      return !exists(path) && original.notificationId == eventId
+        && original.senderUid == e.actorUid && original.receiverUid == e.recipientUid
+        && original.senderName == e.actorName && original.createdAt == request.time;
+    }
+    function friendResponseNotice(eventId) {
+      let e = request.resource.data;
+      let original = get(/databases/$(database)/documents/friendRequests/$(e.requestId)).data;
+      let friendPath = /databases/$(database)/documents/users/$(e.actorUid)/friends/$(e.recipientUid);
+      let accepted = existsAfter(friendPath) && getAfter(friendPath).data.createdAt == request.time;
+      return eventId == original.get('notificationId', e.requestId + '_legacy') + '_result'
+        && original.receiverUid == e.actorUid && original.senderUid == e.recipientUid && original.receiverName == e.actorName
+        && !existsAfter(/databases/$(database)/documents/friendRequests/$(e.requestId))
+        && ((e.outcome == 'accepted' && accepted
+              && getAfter(/databases/$(database)/documents/users/$(e.recipientUid)/friends/$(e.actorUid)).data.createdAt == request.time)
+          || (e.outcome == 'rejected' && !accepted));
+    }
+    function newLoanNotice(eventId) {
+      let e = request.resource.data;
+      let path = /databases/$(database)/documents/loanRequests/$(e.requestId);
+      let original = getAfter(path).data;
+      return !exists(path) && original.notificationId == eventId && original.status == 'pending'
+        && original.borrowerUid == e.actorUid && original.lenderUid == e.recipientUid
+        && original.borrowerName == e.actorName && original.createdAt == request.time;
+    }
+    function loanResponseNotice(eventId) {
+      let e = request.resource.data;
+      let original = get(/databases/$(database)/documents/loanRequests/$(e.requestId)).data;
+      let loanPath = /databases/$(database)/documents/loans/$(e.requestId);
+      return eventId == original.get('notificationId', e.requestId + '_legacy') + '_result'
+        && original.status == 'pending' && original.lenderUid == e.actorUid
+        && original.borrowerUid == e.recipientUid && original.lenderName == e.actorName
+        && !existsAfter(/databases/$(database)/documents/loanRequests/$(e.requestId))
+        && ((e.outcome == 'rejected' && !existsAfter(loanPath))
+          || (e.outcome == 'accepted' && getAfter(loanPath).data.createdAt == request.time
+            && getAfter(loanPath).data.lenderUid == e.actorUid && getAfter(loanPath).data.borrowerUid == e.recipientUid
+            && getAfter(loanPath).data.items == original.items));
+    }
+    match /notificationOutbox/{eventId} {
+      allow create: if hasProfile()
+        && request.resource.data.keys().hasOnly(['kind', 'requestId', 'outcome', 'actorUid', 'actorName', 'recipientUid', 'state', 'createdAt'])
+        && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.recipientUid is string && request.resource.data.recipientUid != request.auth.uid
+        && request.resource.data.requestId is string && request.resource.data.requestId.matches('[a-zA-Z0-9_:.-]{1,160}')
+        && request.resource.data.state == 'pending' && request.resource.data.createdAt == request.time
+        && ((request.resource.data.kind == 'friend' &&
+              ((request.resource.data.outcome == 'requested' && newFriendNotice(eventId)) || friendResponseNotice(eventId)))
+          || (request.resource.data.kind == 'loan' &&
+              ((request.resource.data.outcome == 'requested' && newLoanNotice(eventId)) || loanResponseNotice(eventId))));
+      // Only the Worker (IAM service account) reads and marks delivery events.
+    }
+    match /friendRequests/{requestId} {
+      allow get: if hasProfile() && (resource == null || resource.data.senderUid == request.auth.uid || resource.data.receiverUid == request.auth.uid);
+      allow list, delete: if hasProfile() && (resource.data.senderUid == request.auth.uid || resource.data.receiverUid == request.auth.uid);
+      allow create: if hasProfile()
+        && request.resource.data.keys().hasOnly(['senderUid', 'receiverUid', 'senderName', 'receiverName', 'createdAt', 'notificationId'])
+        && request.resource.data.senderUid == request.auth.uid
+        && request.resource.data.receiverUid is string && request.resource.data.receiverUid != request.auth.uid
+        && validName(request.resource.data.senderName) && validName(request.resource.data.receiverName)
+        && request.resource.data.senderName == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username
+        && get(/databases/$(database)/documents/usernames/$(request.resource.data.receiverName)).data.uid == request.resource.data.receiverUid
+        && requestId == request.resource.data.senderName + ':' + request.resource.data.receiverName
+        && request.resource.data.createdAt == request.time
+        && !exists(/databases/$(database)/documents/friendRequests/$(request.resource.data.receiverName + ':' + request.resource.data.senderName))
+        && !(exists(/databases/$(database)/documents/users/$(request.auth.uid)/friends/$(request.resource.data.receiverUid))
+          && exists(/databases/$(database)/documents/users/$(request.resource.data.receiverUid)/friends/$(request.auth.uid)));
+    }
+    match /users/{uid} {
+      allow get: if owner(uid);
+      allow create: if owner(uid)
+        && request.resource.data.keys().hasOnly(['uid', 'username', 'createdAt'])
+        && request.resource.data.uid == uid
+        && validName(request.resource.data.username)
+        && request.resource.data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username)).data.uid == uid;
+      // Profile and username are immutable. No public profile listing or email exposure.
+      match /collection/{entryId} {
+        allow read: if (owner(uid) && hasProfile()) || mutualFriend(uid);
+        allow delete: if owner(uid) && hasProfile();
+        allow create, update: if owner(uid) && hasProfile()
+          && request.resource.data.keys().hasOnly(['cardId', 'foil', 'quantity', 'updatedAt'])
+          && request.resource.data.cardId is int && request.resource.data.cardId > 0
+          && request.resource.data.cardId <= 2147483647
+          && request.resource.data.foil is bool
+          && entryId == string(request.resource.data.cardId) + (request.resource.data.foil ? '_foil' : '_normal')
+          && request.resource.data.quantity is int
+          && request.resource.data.quantity >= 1 && request.resource.data.quantity <= 9999
+          && request.resource.data.updatedAt == request.time;
+      }
+      match /friends/{friendUid} {
+        allow read: if owner(uid) && hasProfile();
+        allow delete: if hasProfile() && (owner(uid) || (request.auth.uid == friendUid
+          && !existsAfter(/databases/$(database)/documents/users/$(friendUid)/friends/$(uid))));
+        allow create, update: if hasProfile() && uid != friendUid
+          && request.resource.data.keys().hasOnly(['uid', 'username', 'createdAt'])
+          && request.resource.data.uid == friendUid
+          && request.resource.data.username == get(/databases/$(database)/documents/users/$(friendUid)).data.username
+          && request.resource.data.createdAt == request.time
+          && acceptingFriend(uid, friendUid);
+      }
+      match /devices/{deviceId} {
+        allow get, delete: if owner(uid) && hasProfile();
+        allow create, update: if owner(uid) && hasProfile()
+          && deviceId.matches('[a-f0-9]{64}')
+          && request.resource.data.keys().hasOnly(['token', 'updatedAt'])
+          && request.resource.data.token is string && request.resource.data.token.size() >= 20
+          && request.resource.data.token.size() <= 4096 && request.resource.data.updatedAt == request.time;
+      }
+      match /scanBatches/{batchId} {
+        allow get: if owner(uid) && hasProfile();
+        allow create: if owner(uid) && hasProfile()
+          && request.resource.data.keys().hasOnly(['createdAt'])
+          && request.resource.data.createdAt == request.time;
+        // Immutable receipts prevent accidental repeated batch imports.
+      }
+      match /backups/collection {
+        allow read: if owner(uid) && hasProfile();
+        allow create, update: if owner(uid) && hasProfile()
+          && request.resource.data.keys().hasOnly(['schemaVersion', 'counts'])
+          && request.resource.data.schemaVersion == 1
+          && request.resource.data.counts is map
+          && request.resource.data.counts.size() <= 10000;
+      }
+    }
+    function validLoanItem(item) {
+      return item.cardId is int && item.cardId > 0 && item.cardId <= 2147483647
+        && item.name is string && item.identifier is string && item.foil is bool
+        && item.quantity is int && item.quantity >= 1 && item.quantity <= 9999;
+    }
+    function validLoanItems(items) {
+      return items is list && items.size() >= 1 && items.size() <= 10
+        && (items.size() <= 0 || validLoanItem(items[0]))
+        && (items.size() <= 1 || validLoanItem(items[1]))
+        && (items.size() <= 2 || validLoanItem(items[2]))
+        && (items.size() <= 3 || validLoanItem(items[3]))
+        && (items.size() <= 4 || validLoanItem(items[4]))
+        && (items.size() <= 5 || validLoanItem(items[5]))
+        && (items.size() <= 6 || validLoanItem(items[6]))
+        && (items.size() <= 7 || validLoanItem(items[7]))
+        && (items.size() <= 8 || validLoanItem(items[8]))
+        && (items.size() <= 9 || validLoanItem(items[9]))
+        ;
+    }
+    function acceptedRequestLoan(requestId) {
+      let loan = getAfter(/databases/$(database)/documents/loans/$(requestId)).data;
+      return !exists(/databases/$(database)/documents/loans/$(requestId))
+        && loan.lenderUid == resource.data.lenderUid && loan.borrowerUid == resource.data.borrowerUid
+        && loan.lenderName == resource.data.lenderName && loan.borrowerName == resource.data.borrowerName
+        && loan.participants == resource.data.participants && loan.items == resource.data.items
+        && loan.status == 'active' && loan.createdAt == request.time && loan.closedAt == null;
+    }
+    match /loanRequests/{requestId} {
+      allow get: if hasProfile() && (resource == null || request.auth.uid in resource.data.participants);
+      allow list: if hasProfile() && request.auth.uid in resource.data.participants;
+      allow create: if hasProfile()
+        && request.resource.data.keys().hasOnly(['lenderUid', 'lenderName', 'borrowerUid', 'borrowerName', 'participants', 'items', 'status', 'createdAt', 'resolvedAt', 'notificationId'])
+        && request.resource.data.borrowerUid == request.auth.uid
+        && request.resource.data.lenderUid is string && request.resource.data.lenderUid != request.auth.uid
+        && mutualFriend(request.resource.data.lenderUid)
+        && request.resource.data.participants == [request.resource.data.lenderUid, request.auth.uid]
+        && request.resource.data.borrowerName == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username
+        && request.resource.data.lenderName == get(/databases/$(database)/documents/users/$(request.resource.data.lenderUid)).data.username
+        && validLoanItems(request.resource.data.items)
+        && request.resource.data.status == 'pending' && request.resource.data.resolvedAt == null
+        && request.resource.data.createdAt == request.time;
+      allow delete: if hasProfile() && request.auth.uid == resource.data.lenderUid
+        && resource.data.status == 'pending'
+        && (!existsAfter(/databases/$(database)/documents/loans/$(requestId))
+          || (mutualFriend(resource.data.borrowerUid) && acceptedRequestLoan(requestId)));
+      allow update: if hasProfile() && resource.data.status == 'pending'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resolvedAt'])
+        && request.resource.data.resolvedAt == request.time
+        && ((request.auth.uid == resource.data.borrowerUid && request.resource.data.status == 'cancelled')
+          || (request.auth.uid == resource.data.lenderUid && request.resource.data.status == 'rejected')
+          || (request.auth.uid == resource.data.lenderUid && request.resource.data.status == 'accepted'
+            && mutualFriend(resource.data.borrowerUid) && acceptedRequestLoan(requestId)));
+    }
+    function validRemainingAt(i) {
+      let remaining = request.resource.data.remaining;
+      return remaining.size() <= i || (remaining[i] is int && remaining[i] >= 0
+        && remaining[i] <= resource.data.items[i].quantity);
+    }
+    function remainingAt(i) {
+      return request.resource.data.remaining.size() > i ? request.resource.data.remaining[i] : 0;
+    }
+    function validReturnEdit() {
+      let total = remainingAt(0) + remainingAt(1) + remainingAt(2) + remainingAt(3) + remainingAt(4) + remainingAt(5) + remainingAt(6) + remainingAt(7) + remainingAt(8) + remainingAt(9);
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['remaining', 'revision', 'updatedAt', 'status', 'closedAt'])
+        && request.resource.data.remaining is list && request.resource.data.remaining.size() == resource.data.items.size()
+        && validRemainingAt(0) && validRemainingAt(1) && validRemainingAt(2) && validRemainingAt(3) && validRemainingAt(4) && validRemainingAt(5) && validRemainingAt(6) && validRemainingAt(7) && validRemainingAt(8) && validRemainingAt(9)
+        && request.resource.data.revision == resource.data.get('revision', 0) + 1
+        && request.resource.data.updatedAt == request.time
+        && ((total > 0 && request.resource.data.status == 'active' && request.resource.data.closedAt == null)
+          || (total == 0 && request.resource.data.status == 'closed' && request.resource.data.closedAt == request.time));
+    }
+    match /loans/{loanId} {
+      allow get: if hasProfile() && (resource == null || request.auth.uid in resource.data.participants);
+      allow list: if hasProfile() && request.auth.uid in resource.data.participants;
+      allow create: if hasProfile()
+        && request.resource.data.keys().hasOnly(['lenderUid', 'lenderName', 'borrowerUid', 'borrowerName', 'participants', 'items', 'status', 'createdAt', 'closedAt'])
+        && request.resource.data.lenderUid == request.auth.uid
+        && request.resource.data.borrowerUid is string && request.resource.data.borrowerUid != request.auth.uid
+        && request.resource.data.participants == [request.auth.uid, request.resource.data.borrowerUid]
+        && request.resource.data.lenderName == get(/databases/$(database)/documents/users/$(request.auth.uid)).data.username
+        && request.resource.data.borrowerName == get(/databases/$(database)/documents/users/$(request.auth.uid)/friends/$(request.resource.data.borrowerUid)).data.username
+        && get(/databases/$(database)/documents/usernames/$(request.resource.data.borrowerName)).data.uid == request.resource.data.borrowerUid
+        && validLoanItems(request.resource.data.items)
+        && request.resource.data.status == 'active' && request.resource.data.closedAt == null
+        && request.resource.data.createdAt == request.time;
+      allow update: if hasProfile() && resource.data.lenderUid == request.auth.uid
+        && resource.data.status == 'active'
+        && ((request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'closedAt'])
+            && !('remaining' in resource.data) && request.resource.data.status == 'closed' && request.resource.data.closedAt == request.time)
+          || validReturnEdit());
+      // Loans and history cannot be deleted or rewritten by either participant.
+    }
+    match /usernames/{name} {
+      // Exact-name lookup is allowed; listing the registry is not.
+      allow get: if googleUser();
+      allow create: if googleUser() && validName(name)
+        && request.resource.data.keys().hasOnly(['uid'])
+        && request.resource.data.uid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.username == name
+        && getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.uid == request.auth.uid;
+    }
+  }
+}

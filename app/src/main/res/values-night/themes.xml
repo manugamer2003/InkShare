@@ -1,0 +1,4 @@
+<resources>
+    <!-- Use exactly the same palette as values/themes.xml. -->
+    <style name="Base.Theme.InkShare" parent="Fixed.Theme.InkShare" />
+</resources>
