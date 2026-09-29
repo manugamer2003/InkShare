@@ -1,64 +1,50 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#2196F3"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:padding="24dp">
-
-    <TextView android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="InkShare"
-        android:textSize="36sp"
-        android:textStyle="bold" />
-
-    <TextView android:textColor="@color/white"
-        android:id="@+id/welcome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:textSize="20sp" />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/openCollection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_boton_morado"
-        android:text="Catálogo y mi colección"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/openFriends"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_boton_morado"
-        android:text="Mis amigos"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/openLoans"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_boton_morado"
-        android:text="Préstamos"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-    <Button android:id="@+id/openCounter" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Contador de partidas" android:textColor="@color/white" android:background="@drawable/bg_boton_morado"
-        android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/openAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_boton_morado"
-        android:text="Mi cuenta y copia de seguridad"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@drawable/home_background">
+<FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+<ScrollView android:id="@+id/homePanel" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:clipToPadding="false"><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_horizontal" android:padding="20dp">
+<ImageView android:layout_width="64dp" android:layout_height="56dp" android:src="@drawable/home_emblem" android:importantForAccessibility="no"/>
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="MENÚ PRINCIPAL" android:gravity="center" android:fontFamily="serif" android:textStyle="bold" android:textSize="27sp" android:textColor="#F4DEAA" android:layout_marginTop="6dp"/>
+<TextView android:id="@+id/welcome" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textSize="14sp" android:textColor="#C8C2CF" android:layout_marginTop="6dp" android:layout_marginBottom="22dp"/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false" android:layout_marginBottom="14dp"><LinearLayout android:id="@+id/openCollection" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="0dp" android:layout_marginEnd="7dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="COLECCIÓN: Tus cartas y ediciones">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_collection" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="COLECCIÓN" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Tus cartas y ediciones" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout><LinearLayout android:id="@+id/openFriends" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="7dp" android:layout_marginEnd="0dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="AMIGOS: Comparte tu afición">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_friends" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="AMIGOS" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Comparte tu afición" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout></LinearLayout><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false" android:layout_marginBottom="14dp"><LinearLayout android:id="@+id/openLoans" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="0dp" android:layout_marginEnd="7dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="PRÉSTAMOS: Cartas que van y vienen">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_loans" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="PRÉSTAMOS" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Cartas que van y vienen" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout><LinearLayout android:id="@+id/openCounter" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="7dp" android:layout_marginEnd="0dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="CONTADOR: Tu próxima partida">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_counter" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="CONTADOR" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Tu próxima partida" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout></LinearLayout><LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false" android:layout_marginBottom="14dp"><LinearLayout android:id="@+id/openTournament" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="0dp" android:layout_marginEnd="7dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="TORNEOS: Próximamente">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_tournament" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="TORNEOS" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Próximamente" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout><LinearLayout android:id="@+id/openAccount" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="170dp" android:layout_marginStart="7dp" android:layout_marginEnd="0dp" android:padding="14dp" android:gravity="center" android:orientation="vertical" android:background="@drawable/home_tile" android:clickable="true" android:focusable="true" android:contentDescription="MI CUENTA: Perfil y copias de seguridad">
+ <ImageView android:layout_width="80dp" android:layout_height="70dp" android:src="@drawable/home_account" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="MI CUENTA" android:textSize="18sp" android:fontFamily="serif" android:textStyle="bold" android:textColor="#F4DEAA" android:layout_marginTop="8dp" android:importantForAccessibility="no"/>
+ <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="Perfil y copias de seguridad" android:textSize="12sp" android:textColor="#D1C8D8" android:layout_marginTop="5dp" android:importantForAccessibility="no"/>
+ </LinearLayout></LinearLayout><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✦  INKSHARE  ✦" android:letterSpacing="0.15" android:textColor="#A99876" android:textSize="12sp" android:layout_marginTop="8dp" android:layout_marginBottom="8dp"/>
+</LinearLayout></ScrollView>
+<LinearLayout android:id="@+id/newsPanel" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:visibility="gone">
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Noticias · Spoilers" android:textColor="#F4DEAA" android:textSize="24sp" android:fontFamily="serif" android:padding="16dp"/>
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Illumineer Tales · Página original" android:textColor="#D1C8D8" android:paddingStart="16dp" android:paddingEnd="16dp"/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="12dp" android:paddingEnd="12dp"><Button android:id="@+id/reloadNews" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Recargar"/><Button android:id="@+id/externalNews" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Abrir navegador"/></LinearLayout>
+<ProgressBar android:id="@+id/newsLoading" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="3dp"/>
+<TextView android:id="@+id/newsError" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:textColor="#FFFFFF" android:visibility="gone" android:accessibilityLiveRegion="polite"/>
+<FrameLayout android:id="@+id/newsWebHost" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
 </LinearLayout>
+<LinearLayout android:id="@+id/futurePanel" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="28dp" android:visibility="gone">
+<ImageView android:id="@+id/futureIcon" android:layout_width="100dp" android:layout_height="90dp" android:src="@drawable/home_wishlist" android:importantForAccessibility="no"/>
+<TextView android:id="@+id/futureTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textColor="#F4DEAA" android:textSize="30sp" android:fontFamily="serif" android:layout_marginTop="20dp"/>
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:text="PRÓXIMAMENTE" android:textColor="#D5B570" android:textSize="12sp" android:letterSpacing="0.15" android:layout_marginTop="12dp"/>
+<TextView android:id="@+id/futureDescription" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textColor="#D1C8D8" android:textSize="16sp" android:layout_marginTop="16dp"/>
+<Button android:id="@+id/futureBack" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Volver al inicio" android:layout_marginTop="24dp"/>
+</LinearLayout>
+</FrameLayout>
+<View android:layout_width="match_parent" android:layout_height="1dp" android:background="#90795A"/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#EE141623" android:padding="8dp"><LinearLayout android:id="@+id/navHome" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="64dp" android:gravity="center" android:orientation="vertical" android:padding="8dp" android:background="@drawable/home_nav" android:clickable="true" android:focusable="true" android:contentDescription="Inicio"><ImageView android:layout_width="27dp" android:layout_height="25dp" android:src="@drawable/home_home" android:importantForAccessibility="no"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Inicio" android:textSize="12sp" android:textColor="#F1DBA9" android:layout_marginTop="4dp" android:importantForAccessibility="no"/></LinearLayout><LinearLayout android:id="@+id/navNews" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="64dp" android:gravity="center" android:orientation="vertical" android:padding="8dp" android:background="@drawable/home_nav" android:clickable="true" android:focusable="true" android:contentDescription="Noticias"><ImageView android:layout_width="27dp" android:layout_height="25dp" android:src="@drawable/home_news" android:importantForAccessibility="no"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Noticias" android:textSize="12sp" android:textColor="#F1DBA9" android:layout_marginTop="4dp" android:importantForAccessibility="no"/></LinearLayout><LinearLayout android:id="@+id/navWishlist" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:minHeight="64dp" android:gravity="center" android:orientation="vertical" android:padding="8dp" android:background="@drawable/home_nav" android:clickable="true" android:focusable="true" android:contentDescription="Wishlist"><ImageView android:layout_width="27dp" android:layout_height="25dp" android:src="@drawable/home_wishlist" android:importantForAccessibility="no"/><TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Wishlist" android:textSize="12sp" android:textColor="#F1DBA9" android:layout_marginTop="4dp" android:importantForAccessibility="no"/></LinearLayout></LinearLayout></LinearLayout>

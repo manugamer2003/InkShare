@@ -2,7 +2,7 @@ package com.manuelperez.inkshare
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
+    private var panels: HomePanels? = null
     private val notificationPermission = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.RequestPermission()) { PushNotifications.register(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         applyInsets()
+        panels = HomePanels(this, savedInstanceState)
         PushNotifications.register(this)
         val noticePrefs = getSharedPreferences("push_notifications", MODE_PRIVATE)
         if (android.os.Build.VERSION.SDK_INT >= 33 &&
@@ -33,12 +35,16 @@ class MainActivity : AppCompatActivity() {
             })
         }
         findViewById<TextView>(R.id.welcome).text = "Hola, @${Session.username}"
-        findViewById<Button>(R.id.openCollection).setOnClickListener { startActivity(Intent(this, Coleccion::class.java)) }
-        findViewById<Button>(R.id.openFriends).setOnClickListener { startActivity(Intent(this, Amigos::class.java)) }
-        findViewById<Button>(R.id.openLoans).setOnClickListener { startActivity(Intent(this, Prestamos::class.java)) }
-        findViewById<Button>(R.id.openCounter).setOnClickListener { startActivity(Intent(this, Contador::class.java)) }
-        findViewById<Button>(R.id.openAccount).setOnClickListener { startActivity(Intent(this, Cuenta::class.java)) }
+        findViewById<View>(R.id.openCollection).setOnClickListener { startActivity(Intent(this, Coleccion::class.java)) }
+        findViewById<View>(R.id.openFriends).setOnClickListener { startActivity(Intent(this, Amigos::class.java)) }
+        findViewById<View>(R.id.openLoans).setOnClickListener { startActivity(Intent(this, Prestamos::class.java)) }
+        findViewById<View>(R.id.openCounter).setOnClickListener { startActivity(Intent(this, Contador::class.java)) }
+        findViewById<View>(R.id.openAccount).setOnClickListener { startActivity(Intent(this, Cuenta::class.java)) }
     }
+    override fun onSaveInstanceState(outState: Bundle) { panels?.save(outState); super.onSaveInstanceState(outState) }
+    override fun onPause() { panels?.pause(); super.onPause() }
+    override fun onResume() { super.onResume(); panels?.resume() }
+    override fun onDestroy() { panels?.destroy(); super.onDestroy() }
 }
 fun AppCompatActivity.applyInsets() {
     val root = findViewById<android.view.View>(R.id.main)
