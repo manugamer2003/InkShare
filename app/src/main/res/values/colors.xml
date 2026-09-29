@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="ink_gold">#DFC48A</color>
+    <color name="ink_heading">#F4DEAA</color>
+    <color name="ink_surface">#242437</color>
+    <color name="ink_muted">#D1C8D8</color>
+    <color name="ink_border">#8D7854</color>
 </resources>

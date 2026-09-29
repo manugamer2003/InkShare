@@ -1,13 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content" android:fillViewport="false">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:padding="16dp">
-        <TextView android:id="@+id/largeCardStatus" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Cargando imagen…" android:textColor="@color/white" android:accessibilityLiveRegion="polite" />
-        <ImageView android:id="@+id/largeCardImage" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:adjustViewBounds="true" android:scaleType="fitCenter" android:minHeight="200dp" />
-        <TextView android:id="@+id/largeCardDetails" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:paddingTop="12dp" android:textColor="@color/white" android:textSize="16sp" />
-    </LinearLayout>
-</ScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp" android:background="@drawable/ink_panel">
+    <TextView android:id="@+id/largeCardStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cargando imagen…" android:textColor="@color/white" android:accessibilityLiveRegion="polite" />
+    <com.manuelperez.inkshare.ZoomCardView android:id="@+id/largeCardImage" android:layout_width="match_parent" android:layout_height="0dp" android:minHeight="200dp" android:layout_weight="1" />
+    <TextView android:id="@+id/largeCardDetails" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="12dp" android:textColor="@color/white" android:textSize="16sp" />
+</LinearLayout>

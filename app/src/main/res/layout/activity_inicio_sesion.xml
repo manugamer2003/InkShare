@@ -1,112 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#3F51B5"
-    android:fillViewport="true"
-    android:padding="24dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#2196F3"
-        android:backgroundTint="#2196F3"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="InkShare"
-            android:textSize="36sp"
-            android:textStyle="bold" />
-
-        <TextView android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="Tu colección y tus amigos, en un mismo lugar."
-            android:textSize="18sp" />
-
-        <Button android:textColor="@color/white"
-            android:id="@+id/googleLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Iniciar sesión con Google"
-            android:background="@drawable/bg_boton_morado"
-            app:icon="@drawable/common_google_signin_btn_text_light_normal"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-        <LinearLayout
-            android:id="@+id/usernameForm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView android:textColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Elige tu nombre de usuario"
-                android:textSize="24sp" />
-
-            <TextView android:textColor="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="De 3 a 20 letras (a-z), números o guion bajo. Se guardará en minúsculas y tus amigos podrán encontrarte por él." />
-
-            <EditText android:textColor="@color/white"
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre de usuario"
-                android:inputType="textVisiblePassword"
-                android:maxLines="1"
-                android:minHeight="48dp" />
-
-            <Button android:textColor="@color/white"
-                android:id="@+id/saveUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_boton_morado"
-                android:text="Crear mi perfil"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/home_background" android:fillViewport="true" android:padding="24dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="vertical">
+        <TextView android:textColor="@color/ink_heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="InkShare" android:textSize="36sp" android:textStyle="bold" android:fontFamily="serif" android:layout_marginBottom="12dp" />
+        <TextView android:textColor="@color/white" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="32dp" android:text="Tu colección y tus amigos, en un mismo lugar." android:textSize="18sp" />
+        <Button android:textColor="@color/white" android:id="@+id/googleLogin" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Iniciar sesión con Google" android:background="@drawable/ink_button" app:icon="@drawable/common_google_signin_btn_text_light_normal" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:backgroundTint="@null" app:backgroundTint="@null" />
+        <LinearLayout android:id="@+id/usernameForm" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+            <TextView android:textColor="@color/ink_heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Elige tu nombre de usuario" android:textSize="24sp" android:fontFamily="serif" android:layout_marginBottom="12dp" />
+            <TextView android:textColor="@color/white" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="De 3 a 20 letras (a-z), números o guion bajo. Se guardará en minúsculas y tus amigos podrán encontrarte por él." />
+            <EditText android:textColor="@color/white" android:id="@+id/username" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nombre de usuario" android:inputType="textVisiblePassword" android:maxLines="1" android:minHeight="48dp" android:background="@drawable/bg_campo_usuario" android:textColorHint="@color/ink_muted" />
+            <Button android:textColor="@color/white" android:id="@+id/saveUsername" android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/ink_button" android:text="Crear mi perfil" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:backgroundTint="@null" app:backgroundTint="@null" />
         </LinearLayout>
-
-        <Button android:textColor="@color/white"
-            android:id="@+id/retryProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reintentar cargar perfil"
-            android:background="@drawable/bg_boton_morado"
-            android:visibility="gone"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-        <Button android:textColor="@color/white"
-            android:id="@+id/changeGoogle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Usar otra cuenta Google"
-            android:background="@drawable/bg_boton_morado"
-            android:visibility="gone"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-        <ProgressBar
-            android:id="@+id/authProgress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <TextView android:textColor="@color/white"
-            android:id="@+id/authStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:accessibilityLiveRegion="polite" />
+        <Button android:textColor="@color/white" android:id="@+id/retryProfile" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Reintentar cargar perfil" android:background="@drawable/ink_button" android:visibility="gone" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:backgroundTint="@null" app:backgroundTint="@null" />
+        <Button android:textColor="@color/white" android:id="@+id/changeGoogle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Usar otra cuenta Google" android:background="@drawable/ink_button" android:visibility="gone" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:backgroundTint="@null" app:backgroundTint="@null" />
+        <ProgressBar android:id="@+id/authProgress" android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone" />
+        <TextView android:textColor="@color/white" android:id="@+id/authStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" />
     </LinearLayout>
 </ScrollView>

@@ -1,9 +1,6 @@
 <resources>
-    <!-- Shared palette: independent of the device's light/dark setting. -->
     <style name="Fixed.Theme.InkShare" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="android:forceDarkAllowed">false</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
@@ -12,7 +9,7 @@
         <item name="android:textColorSecondaryInverse">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
         <item name="android:textColorLink">@color/white</item>
-        <item name="colorPrimary">#673AB7</item>
+        <item name="colorPrimary">@color/ink_gold</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnPrimaryContainer">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
@@ -26,14 +23,40 @@
         <item name="buttonBarNegativeButtonStyle">@style/InkShare.DialogButton</item>
         <item name="buttonBarNeutralButtonStyle">@style/InkShare.DialogButton</item>
         <item name="tabStyle">@style/InkShare.Tabs</item>
+        <item name="android:windowBackground">@drawable/home_background</item>
+        <item name="colorSurface">@color/ink_surface</item>
+        <item name="colorSecondary">@color/ink_gold</item>
+        <item name="colorControlActivated">@color/ink_gold</item>
+        <item name="materialButtonStyle">@style/InkShare.Button</item>
+        <item name="buttonStyle">@style/InkShare.Button</item>
+        <item name="android:buttonStyle">@style/InkShare.Button</item>
+        <item name="editTextStyle">@style/InkShare.EditText</item>
     </style>
     <style name="InkShare.DialogButton" parent="Widget.Material3.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/ink_heading</item>
     </style>
     <style name="InkShare.Tabs" parent="Widget.Material3.TabLayout">
-        <item name="tabTextColor">@color/white</item>
-        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextColor">@color/ink_muted</item>
+        <item name="tabSelectedTextColor">@color/ink_heading</item>
+        <item name="tabIndicatorColor">@color/ink_gold</item>
     </style>
     <style name="Base.Theme.InkShare" parent="Fixed.Theme.InkShare" />
     <style name="Theme.InkShare" parent="Base.Theme.InkShare" />
+    <style name="InkShare.Button" parent="Widget.Material3.Button">
+        <item name="android:background">@drawable/ink_button</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/ink_surface</item>
+        <item name="strokeColor">@color/ink_border</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="rippleColor">#35DFC48A</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+    <style name="InkShare.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/bg_campo_usuario</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/ink_muted</item>
+    </style>
 </resources>

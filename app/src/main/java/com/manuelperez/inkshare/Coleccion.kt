@@ -55,6 +55,10 @@ class Coleccion : AppCompatActivity() {
         findViewById<ListView>(R.id.cardList).apply {
             adapter = this@Coleccion.adapter
             setOnItemClickListener { _, _, position, _ -> edit(this@Coleccion.adapter.rows[position]) }
+            setOnItemLongClickListener { _, _, position, _ ->
+                showLargeCard(this@Coleccion.adapter.rows[position])
+                true
+            }
         }
         findViewById<EditText>(R.id.search).doAfterTextChanged { refresh() }
         findViewById<CheckBox>(R.id.onlyOwned).setOnCheckedChangeListener { _, _ -> refresh() }
@@ -173,25 +177,27 @@ class Coleccion : AppCompatActivity() {
         val picture = content.findViewById<ImageView>(R.id.largeCardImage)
         val loading = content.findViewById<TextView>(R.id.largeCardStatus)
         content.findViewById<TextView>(R.id.largeCardDetails).text =
-            "${card.identifier} · ${card.setName}\nNormal: ${model.count(card, false)} · Foil: ${model.count(card, true)}"
+            "${card.identifier} · ${card.setName}\nPellizca para ampliar · Doble toque para acercar\nNormal: ${model.count(card, false)} · Foil: ${model.count(card, true)}"
         picture.contentDescription = "${card.name}, ${card.identifier}"
         // Bound the scroll area to the current window, including split-screen devices.
         val root = findViewById<View>(R.id.main)
         val availableHeight = root.height.takeIf { it > 0 } ?: resources.displayMetrics.heightPixels
-        content.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (availableHeight * 0.65f).toInt())
-        val dialog = AlertDialog.Builder(this).setTitle(card.name).setView(content)
+        content.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (availableHeight * 0.70f).toInt())
+        val builder = AlertDialog.Builder(this).setTitle(card.name).setView(content)
             .setPositiveButton("Cerrar", null)
-            .setNeutralButton("Pedir préstamo") { _, _ ->
+        if (model.readOnly) builder.setNeutralButton("Pedir préstamo") { _, _ ->
                 startActivity(android.content.Intent(this, Prestamos::class.java)
                     .putExtra("collectionOwnerUid", intent.getStringExtra("collectionOwnerUid"))
                     .putExtra("collectionOwnerName", model.ownerName)
                     .putExtra("requestedCardId", card.id).putExtra("requestedCardName", card.name)
                     .putExtra("requestedCardIdentifier", card.identifier).putExtra("requestedFoil", model.count(card, false) == 0))
-            }.create()
+            }
+        val dialog = builder.create()
         dialog.show()
         val availableWidth = root.width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
-        dialog.window?.setLayout((availableWidth * 0.95f).toInt(), ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setLayout((availableWidth * 0.95f).toInt(), (availableHeight * 0.90f).toInt())
         val request = picture.load(card.fullImage) {
+            size(coil.size.Size.ORIGINAL)
             crossfade(true)
             listener(
                 onSuccess = { _, _ -> loading.visibility = View.GONE },
@@ -209,7 +215,7 @@ class Coleccion : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val row = convertView ?: LayoutInflater.from(this@Coleccion).inflate(R.layout.row_card, parent, false)
             val card = rows[position]
-            row.findViewById<TextView>(R.id.cardRowHint).text = if (model.readOnly) "Toca para ampliar la carta" else "Toca para editar cantidades"
+            row.findViewById<TextView>(R.id.cardRowHint).text = if (model.readOnly) "Toca para ampliar la carta" else "Toca para editar · Mantén pulsado para ampliar"
             row.findViewById<TextView>(R.id.cardName).text = card.name
             row.findViewById<TextView>(R.id.cardIdentifier).text = card.identifier
             row.findViewById<TextView>(R.id.cardCounts).text = if (model.readOnly)
@@ -217,7 +223,11 @@ class Coleccion : AppCompatActivity() {
             else listOf(false, true).filter { if (it) card.hasFoil else card.hasNormal }.joinToString("\n") {
                 "${if (it) "Foil" else "Normal"}: ${loans.availability(card.id, it, model.count(card, it))}"
             }
-            row.findViewById<ImageView>(R.id.cardImage).load(card.image) { crossfade(true) }
+            row.findViewById<ImageView>(R.id.cardImage).load(card.image) {
+                crossfade(true)
+                placeholder(R.drawable.home_collection)
+                error(R.drawable.home_collection)
+            }
             return row
         }
     }

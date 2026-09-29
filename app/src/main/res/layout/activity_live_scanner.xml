@@ -1,106 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#2196F3"
-    android:backgroundTint="#2196F3"
-    android:foregroundTint="@color/white"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Escáner en directo"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <TextView android:textColor="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Encuadra una sola carta completa, con buena luz y sin reflejos. El catálogo usa nombres en inglés." />
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:gravity="center_vertical">
-        <CheckBox android:id="@+id/batchMode" android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:text="Escaneo en lote" android:textColor="@color/white" />
-        <Button android:id="@+id/reviewBatch" android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_marginStart="12dp" android:text="Revisar lote (0)" android:textColor="@color/white"
-            android:backgroundTint="#673AB7" android:visibility="gone" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/home_background" android:foregroundTint="@color/white" android:orientation="vertical" android:padding="16dp">
+    <TextView android:textColor="@color/ink_heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Escáner en directo" android:textSize="24sp" android:textStyle="bold" android:fontFamily="serif" android:layout_marginBottom="12dp" />
+    <TextView android:textColor="@color/white" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Encuadra una sola carta completa, con buena luz y sin reflejos. El catálogo usa nombres en inglés." />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+        <CheckBox android:id="@+id/batchMode" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Escaneo en lote" android:textColor="@color/white" />
+        <Button android:id="@+id/reviewBatch" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:text="Revisar lote (0)" android:textColor="@color/white" android:backgroundTint="@null" android:visibility="gone" style="@style/InkShare.Button" android:background="@drawable/ink_button" app:backgroundTint="@null" />
     </LinearLayout>
-    <CheckBox android:id="@+id/disableScanVibration"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="Desactivar vibración" android:textColor="@color/white" />
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginVertical="12dp"
-        android:layout_weight="1">
-        <androidx.camera.view.PreviewView
-            android:id="@+id/cameraPreview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <ImageView
-            android:id="@+id/scannedCardPreview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#CC101018"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:visibility="gone"
-            android:importantForAccessibility="yes" />
+    <CheckBox android:id="@+id/disableScanVibration" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Desactivar vibración" android:textColor="@color/white" />
+    <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_marginVertical="12dp" android:layout_weight="1">
+        <androidx.camera.view.PreviewView android:id="@+id/cameraPreview" android:layout_width="match_parent" android:layout_height="match_parent" />
+        <ImageView android:id="@+id/scannedCardPreview" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#CC101018" android:padding="8dp" android:scaleType="fitCenter" android:visibility="gone" android:importantForAccessibility="yes" />
     </FrameLayout>
-
-    <TextView android:textColor="@color/white"
-        android:id="@+id/liveStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:accessibilityLiveRegion="polite"
-        android:text="Apunta a una carta y mantén el móvil quieto." />
-
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:baselineAligned="false">
-        <Button android:id="@+id/toggleTorch" android:layout_width="0dp" android:layout_height="match_parent"
-            android:layout_weight="1" android:minWidth="0dp" android:minHeight="48dp"
-            android:layout_marginEnd="@dimen/button_half_gap" android:layout_marginVertical="@dimen/button_half_gap"
-            android:backgroundTint="#673AB7" android:textColor="@color/white" android:text="Linterna" android:enabled="false" />
-        <Button android:id="@+id/manualCard" android:layout_width="0dp" android:layout_height="match_parent"
-            android:layout_weight="1" android:minWidth="0dp" android:minHeight="48dp"
-            android:layout_marginStart="@dimen/button_half_gap" android:layout_marginVertical="@dimen/button_half_gap"
-            android:backgroundTint="#673AB7" android:textColor="@color/white" android:text="Buscar carta" android:enabled="false" />
+    <TextView android:textColor="@color/white" android:id="@+id/liveStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" android:text="Apunta a una carta y mantén el móvil quieto." />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:baselineAligned="false">
+        <Button android:id="@+id/toggleTorch" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:minHeight="48dp" android:layout_marginEnd="@dimen/button_half_gap" android:layout_marginVertical="@dimen/button_half_gap" android:backgroundTint="@null" android:textColor="@color/white" android:text="Linterna" android:enabled="false" style="@style/InkShare.Button" android:background="@drawable/ink_button" app:backgroundTint="@null" />
+        <Button android:id="@+id/manualCard" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:minWidth="0dp" android:minHeight="48dp" android:layout_marginStart="@dimen/button_half_gap" android:layout_marginVertical="@dimen/button_half_gap" android:backgroundTint="@null" android:textColor="@color/white" android:text="Buscar carta" android:enabled="false" style="@style/InkShare.Button" android:background="@drawable/ink_button" app:backgroundTint="@null" />
     </LinearLayout>
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/cameraSettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Abrir ajustes de permisos"
-        android:visibility="gone"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/nextCard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#673AB7"
-        android:drawableTint="@color/white"
-        android:enabled="false"
-        android:foregroundTint="@color/white"
-        android:text="Escanear siguiente"
-        app:strokeColor="@color/white"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
-
-    <Button android:textColor="@color/white"
-        android:id="@+id/closeScanner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#673AB7"
-        android:text="Volver a mi colección"
-        app:strokeColor="@color/black"     android:layout_marginTop="@dimen/button_half_gap"
-            android:layout_marginBottom="@dimen/button_half_gap"
-        />
+    <Button android:textColor="@color/white" android:id="@+id/cameraSettings" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Abrir ajustes de permisos" android:visibility="gone" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:background="@drawable/ink_button" android:backgroundTint="@null" app:backgroundTint="@null" />
+    <Button android:textColor="@color/white" android:id="@+id/nextCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:backgroundTint="@null" android:drawableTint="@color/white" android:enabled="false" android:foregroundTint="@color/white" android:text="Escanear siguiente" app:strokeColor="@color/white" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:background="@drawable/ink_button" app:backgroundTint="@null" />
+    <Button android:textColor="@color/white" android:id="@+id/closeScanner" android:layout_width="match_parent" android:layout_height="wrap_content" android:backgroundTint="@null" android:text="Volver a mi colección" app:strokeColor="@color/black" android:layout_marginTop="@dimen/button_half_gap" android:layout_marginBottom="@dimen/button_half_gap" style="@style/InkShare.Button" android:background="@drawable/ink_button" app:backgroundTint="@null" />
 </LinearLayout>
