@@ -106,6 +106,16 @@ service cloud.firestore {
         && request.resource.data.createdAt == request.time
         && getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username)).data.uid == uid;
       // Profile and username are immutable. No public profile listing or email exposure.
+      match /wishlist/{cardId} {
+        allow read: if (owner(uid) && hasProfile()) || mutualFriend(uid);
+        allow delete: if owner(uid) && hasProfile();
+        allow create, update: if owner(uid) && hasProfile()
+          && request.resource.data.keys().hasOnly(['cardId', 'updatedAt'])
+          && request.resource.data.cardId is int && request.resource.data.cardId > 0
+          && request.resource.data.cardId <= 2147483647
+          && cardId == string(request.resource.data.cardId)
+          && request.resource.data.updatedAt == request.time;
+      }
       match /collection/{entryId} {
         allow read: if (owner(uid) && hasProfile()) || mutualFriend(uid);
         allow delete: if owner(uid) && hasProfile();

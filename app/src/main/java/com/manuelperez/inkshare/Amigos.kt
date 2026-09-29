@@ -55,11 +55,14 @@ class Amigos : AppCompatActivity() {
                 }
                 val friend = model.friends.value.orEmpty().getOrNull(position) ?: return@setOnItemClickListener
                 AlertDialog.Builder(this@Amigos).setTitle("@${friend.username}")
-                    .setItems(arrayOf("Ver colección", "Eliminar amigo")) { _, option ->
+                    .setItems(arrayOf("Ver colección", "Ver Wishlist", "Eliminar amigo")) { _, option ->
                         if (option == 0) {
                             startActivity(android.content.Intent(this@Amigos, Coleccion::class.java)
                                 .putExtra("collectionOwnerUid", friend.uid)
                                 .putExtra("collectionOwnerName", friend.username))
+                        } else if (option == 1) {
+                            startActivity(android.content.Intent(this@Amigos, Wishlist::class.java)
+                                .putExtra("wishlistOwnerUid", friend.uid).putExtra("wishlistOwnerName", friend.username))
                         } else {
                             AlertDialog.Builder(this@Amigos).setTitle("Eliminar a @${friend.username}")
                                 .setMessage("Dejaréis de poder consultar vuestras colecciones compartidas. ¿Eliminar amigo?")

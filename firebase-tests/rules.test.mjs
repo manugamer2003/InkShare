@@ -520,3 +520,28 @@ test('loan rejection sends only valid receiver event and cancellation cannot for
  await assertFails(setDoc(doc(b,'notificationOutbox/rejectpush_result'),notice('loan','rejected','alice','bob','rejectpush')));
  const reject=writeBatch(a);reject.delete(doc(a,'loanRequests/rejectpush'));reject.set(doc(a,'notificationOutbox/rejectpush_result'),notice('loan','rejected','alice','bob','rejectpush'));await assertSucceeds(reject.commit());
 });
+
+test('wishlist is private, owner writable, and only mutual friends can view', async () => {
+  const {a,b,c}=await requestSetup();
+  const ref=doc(a,'users/alice/wishlist/1574');
+  await assertSucceeds(setDoc(ref,{cardId:1574,updatedAt:serverTimestamp()}));
+  await assertSucceeds(getDocs(collection(a,'users/alice/wishlist')));
+  await assertFails(getDocs(collection(b,'users/alice/wishlist')));
+  await seedLegacy(doc(a,'users/alice/friends/bob'),{uid:'bob',username:'bob',createdAt:serverTimestamp()});
+  await assertFails(getDocs(collection(b,'users/alice/wishlist')));
+  await seedLegacy(doc(b,'users/bob/friends/alice'),{uid:'alice',username:'alice',createdAt:serverTimestamp()});
+  await assertSucceeds(getDocs(collection(b,'users/alice/wishlist')));
+  await assertFails(getDocs(collection(c,'users/alice/wishlist')));
+  await assertFails(setDoc(doc(b,'users/alice/wishlist/1574'),{cardId:1574,updatedAt:serverTimestamp()}));
+  await assertFails(deleteDoc(doc(b,'users/alice/wishlist/1574')));
+  await assertSucceeds(deleteDoc(doc(a,'users/alice/friends/bob')));
+  await assertFails(getDocs(collection(b,'users/alice/wishlist')));
+  await assertSucceeds(deleteDoc(ref));
+});
+test('wishlist rejects invalid IDs, spoofed fields and unauthenticated access', async () => {
+  const {a}=await requestSetup();
+  for (const data of [{cardId:0,updatedAt:serverTimestamp()},{cardId:2,updatedAt:serverTimestamp()},{cardId:1,updatedAt:serverTimestamp(),uid:'bob'},{cardId:1}]) {
+    await assertFails(setDoc(doc(a,'users/alice/wishlist/1'),data));
+  }
+  await assertFails(getDocs(collection(env.unauthenticatedContext().firestore(),'users/alice/wishlist')));
+});
