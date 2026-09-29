@@ -27,5 +27,6 @@
     </provider>
     <activity android:screenOrientation="portrait" android:name=".Contador" android:exported="false" android:windowSoftInputMode="adjustResize" />
     <activity android:screenOrientation="portrait" android:name=".Cuenta" android:exported="false" />
+    <activity android:name=".DeckBuilder" android:screenOrientation="portrait" android:exported="false" android:windowSoftInputMode="adjustResize" />
   </application>
 </manifest>

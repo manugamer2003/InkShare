@@ -28,6 +28,10 @@ class Coleccion : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_coleccion)
         applyInsets()
+        findViewById<Button>(R.id.openDeckBuilder).apply {
+            visibility = if (model.readOnly) View.GONE else View.VISIBLE
+            setOnClickListener { startActivity(android.content.Intent(this@Coleccion, DeckBuilder::class.java)) }
+        }
         if (model.readOnly) {
             findViewById<TextView>(R.id.collectionTitle).text = "Colección de @${model.ownerName}"
             findViewById<View>(R.id.scanCamera).visibility = View.GONE
