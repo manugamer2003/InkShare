@@ -17,7 +17,7 @@ import org.json.JSONObject
 
 class CloudViewModel(app: Application) : AndroidViewModel(app) {
     val busy = MutableLiveData(false)
-    val status = MutableLiveData("Cada cambio de cartas se guarda automáticamente en Firebase.")
+    val status = MutableLiveData("Los cambios se guardan en el móvil y se envían automáticamente. Las copias adicionales e importaciones necesitan Internet.")
     val email = MutableLiveData(FirebaseAuth.getInstance().currentUser?.email)
     private val uid = Session.uid()
     private val repository = CollectionRepository(uid)

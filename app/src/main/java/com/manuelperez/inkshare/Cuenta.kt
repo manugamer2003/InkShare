@@ -25,7 +25,7 @@ class Cuenta : AppCompatActivity() {
         applyInsets()
         findViewById<TextView>(R.id.account).text = "@${Session.username}\n${model.email.value}\nUID: ${Session.uid()}"
         findViewById<Button>(R.id.backup).setOnClickListener {
-            confirm("Crear copia adicional", "Las cartas ya están en Firebase. Esta copia adicional sustituirá la copia de seguridad anterior de esta cuenta.") { model.backup() }
+            confirm("Crear copia adicional", "Primero se enviarán los cambios pendientes. Esta copia adicional sustituirá la copia de seguridad anterior de esta cuenta.") { model.backup() }
         }
         findViewById<Button>(R.id.restore).setOnClickListener {
             confirm("Importar copia", "Se combinará la copia con tu colección de Firebase, conservando la cantidad mayor para cada carta y acabado. No se suman ni se borran las cantidades existentes.") { model.restore() }
@@ -67,6 +67,29 @@ class Cuenta : AppCompatActivity() {
                 }.show()
             PushNotifications.diagnose(applicationContext) { message ->
                 if (!isDestroyed && !isFinishing && dialog.isShowing) dialog.setMessage(message)
+            }
+        }
+        val collectionUid = Session.uid()
+        lifecycleScope.launch {
+            CollectionSync.account(collectionUid).load()
+            CollectionSync.account(collectionUid).updates.collect {
+                findViewById<TextView>(R.id.collectionSyncStatus).text = it.text
+                findViewById<Button>(R.id.resolveCollectionConflict).visibility = if (it.conflictId == null) View.GONE else View.VISIBLE
+            }
+        }
+        findViewById<Button>(R.id.retryCollectionSync).setOnClickListener {
+            CollectionSync.activate(collectionUid)
+        }
+        findViewById<Button>(R.id.resolveCollectionConflict).setOnClickListener {
+            val store = CollectionSync.account(collectionUid)
+            val pending = store.updates.value
+            val conflictId = pending.conflictId ?: return@setOnClickListener
+            confirm("Resolver cambio pendiente", pending.text + "\n\n¿Descartar SOLO este cambio o lote en conflicto? Se conservarán las cantidades de Firebase y se enviarán después los demás cambios pendientes. Necesita conexión.") {
+                lifecycleScope.launch {
+                    try { store.synchronize(discardConflictId = conflictId) }
+                    catch (e: CancellationException) { throw e }
+                    catch (e: Exception) { store.report("No se pudo resolver. Los cambios siguen guardados: ${e.localizedMessage}", conflictId) }
+                }
             }
         }
         model.status.observe(this) { findViewById<TextView>(R.id.cloudStatus).text = it }

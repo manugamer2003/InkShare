@@ -10,6 +10,9 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.google.firebase.FirebaseNetworkException
 import kotlinx.coroutines.tasks.await
 
 data class AuthState(val busy: Boolean = false, val signedIn: Boolean = false,
@@ -51,26 +54,43 @@ class AuthViewModel(app: Application) : AndroidViewModel(app) {
         val user = auth.currentUser
         if (user == null) { Session.clear(); state.value = AuthState(busy = true); return }
         state.value = AuthState(busy = true, signedIn = true, message = "Verificando sesión y perfil de Firebase…")
-        val token = user.getIdToken(false).await()
-        val provider = (token.claims["firebase"] as? Map<*, *>)?.get("sign_in_provider")
-        if (provider != "google.com") {
-            auth.signOut(); Session.clear()
-            state.value = AuthState(busy = true, message = "Esta app ahora usa únicamente Google. Inicia sesión con Google.")
+        val cached = withContext(Dispatchers.IO) { OfflineProfile.read(getApplication(), user.uid) }
+        if (cached != null && !OfflineProfile.connected(getApplication())) {
+            accept(cached, offline = true)
             return
         }
-        state.value = AuthState(busy = true, signedIn = true, message = "Comprobando tu perfil…")
-        val profile = ProfileRepository().get(user.uid)
-        if (profile == null) state.value = AuthState(busy = true, signedIn = true, needsUsername = true, message = "Elige tu nombre único para terminar el registro.")
-        else accept(profile)
+        try {
+            val token = user.getIdToken(false).await()
+            val provider = (token.claims["firebase"] as? Map<*, *>)?.get("sign_in_provider")
+            if (provider != "google.com") {
+                auth.signOut(); Session.clear()
+                withContext(Dispatchers.IO) { OfflineProfile.remove(getApplication(), user.uid) }
+                state.value = AuthState(busy = true, message = "Esta app usa únicamente Google. Inicia sesión con Google.")
+                return
+            }
+            val profile = ProfileRepository().get(user.uid)
+            if (profile == null) {
+                withContext(Dispatchers.IO) { OfflineProfile.remove(getApplication(), user.uid) }
+                state.value = AuthState(busy = true, signedIn = true, needsUsername = true,
+                    message = "Elige tu nombre único para terminar el registro.")
+            } else accept(profile)
+        } catch (e: Exception) {
+            val networkFailure = e is FirebaseNetworkException || (e is FirebaseFirestoreException &&
+                e.code in listOf(FirebaseFirestoreException.Code.UNAVAILABLE, FirebaseFirestoreException.Code.DEADLINE_EXCEEDED))
+            if (cached != null && networkFailure) accept(cached, offline = true)
+            else throw e
+        }
     }
     fun createProfile(name: String) = run {
         check(state.value?.signedIn == true && state.value?.needsUsername == true) { "Comprueba tu sesión antes de crear el perfil" }
         val uid = requireNotNull(FirebaseAuth.getInstance().currentUser).uid
         accept(ProfileRepository().create(uid, name))
     }
-    private fun accept(profile: UserProfile) {
+    private suspend fun accept(profile: UserProfile, offline: Boolean = false) {
         check(FirebaseAuth.getInstance().currentUser?.uid == profile.uid) { "La cuenta ha cambiado. Vuelve a iniciar sesión." }
+        if (!offline) withContext(Dispatchers.IO) { OfflineProfile.save(getApplication(), profile) }
         Session.accept(profile.uid, profile.username)
+        CollectionSync.activate(profile.uid)
         state.value = AuthState(busy = true, signedIn = true, ready = true, message = "Hola, @${profile.username}")
     }
     fun signOut() {

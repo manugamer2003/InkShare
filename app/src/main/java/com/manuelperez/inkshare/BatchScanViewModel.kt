@@ -49,13 +49,13 @@ class BatchScanViewModel(private val state: SavedStateHandle) : ViewModel() {
                 quantities.value = hashMapOf()
                 batchId = UUID.randomUUID().toString()
                 locked.value = false
-                message.value = "Lote guardado: ${values.values.sum()} cartas añadidas a tu colección."
+                message.value = "Lote guardado en el móvil: ${values.values.sum()} cartas. Se sincronizará automáticamente."
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) {
                 if (e is IllegalArgumentException) {
                     locked.value = false
                     message.value = "No se guardó el lote: ${e.localizedMessage}. Ajusta las cantidades y vuelve a intentarlo."
-                } else message.value = "No se pudo confirmar el guardado. Conservamos el lote: conecta a Internet y pulsa Revisar lote para reintentar sin duplicarlo. ${e.localizedMessage}"
+                } else message.value = "No se pudo confirmar el guardado. Conservamos el lote: pulsa Revisar lote para reintentar sin duplicarlo. ${e.localizedMessage}"
             } finally { busy.value = false }
         }
     }

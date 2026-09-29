@@ -31,7 +31,7 @@
         <TextView android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tu perfil y tus cartas se guardan en Firebase. Los cambios de cantidad se guardan automáticamente y aparecen en tus otros dispositivos. Necesitas conexión para modificar cantidades." />
+            android:text="Tu colección se guarda primero en este móvil, incluso sin Internet. Los cambios pendientes se envían a Firebase al recuperar la conexión, desde cualquier pantalla. La primera entrada con Google, los préstamos y los amigos necesitan conexión. No borres los datos ni desinstales la app mientras queden cambios pendientes." />
 
         <Button android:textColor="@color/white"
             android:id="@+id/backup"
@@ -76,6 +76,30 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_boton_morado"
             android:text="Comprobar notificaciones"
+            android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap" />
+
+        <TextView android:textColor="@color/white"
+            android:id="@+id/collectionSyncStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite" />
+        <Button android:textColor="@color/white"
+            android:id="@+id/retryCollectionSync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Sincronizar colección"
+            android:layout_marginTop="@dimen/button_half_gap"
+            android:layout_marginBottom="@dimen/button_half_gap" />
+
+        <Button android:textColor="@color/white"
+            android:id="@+id/resolveCollectionConflict"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_boton_morado"
+            android:text="Resolver cambio en conflicto"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/button_half_gap"
             android:layout_marginBottom="@dimen/button_half_gap" />
 

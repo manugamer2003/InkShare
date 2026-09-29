@@ -15,7 +15,7 @@ fun AppCompatActivity.cardQuantityDialog(
     fun dp(n: Int) = (n * resources.displayMetrics.density).toInt()
     val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(20), dp(8), dp(20), dp(8)) }
     val info = TextView(this).apply {
-        text = if (batch == null) "Copias en tu colección. Cada cambio se guarda en Firebase." else "Ajusta las copias que añadirás al guardar el lote."
+        text = if (batch == null) "Copias en tu colección. Cada cambio se guarda en el móvil y se sincroniza automáticamente." else "Ajusta las copias que añadirás al guardar el lote."
         setTextColor(Color.WHITE)
     }
     box.addView(info)

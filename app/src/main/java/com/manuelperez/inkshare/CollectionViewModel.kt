@@ -39,6 +39,9 @@ class CollectionViewModel(app: Application, state: SavedStateHandle) : AndroidVi
                 }
                 message.value = "${cards.value!!.size} cartas · nombres en inglés"
                 if (!readOnly || viewing) startListening()
+                if (!readOnly) viewModelScope.launch {
+                    CollectionSync.account(ownerUid).updates.collect { syncStatus.value = it.text }
+                }
             } catch (e: CancellationException) { throw e }
             catch (e: Exception) { message.value = "Error al cargar: ${e.localizedMessage}" }
             finally { busy.value = false }
@@ -50,10 +53,10 @@ class CollectionViewModel(app: Application, state: SavedStateHandle) : AndroidVi
             if (readOnly && !viewing) return@listen
             // Never display cached private data without a fresh server authorization.
             counts.value = if (readOnly && cached) emptyMap() else values
-            syncStatus.value = when {
+            if (readOnly) syncStatus.value = when {
                 readOnly && cached -> "Conecta a Internet para comprobar que sois amigos mutuos."
                 readOnly -> "Colección de @$ownerName · Solo lectura"
-                cached -> "Vista guardada en caché. Se necesita conexión para cambiar cantidades."
+                cached -> "Guardado en el móvil. Pendiente de sincronizar."
                 else -> "Colección sincronizada con Firebase"
             }
         }, { error ->
@@ -80,9 +83,9 @@ class CollectionViewModel(app: Application, state: SavedStateHandle) : AndroidVi
         viewModelScope.launch {
             try {
                 repository.change(card, foil, delta)
-                message.value = "Cambio guardado en Firebase."
+                message.value = "Cambio guardado en el móvil. La sincronización es automática."
             } catch (e: CancellationException) { throw e }
-            catch (e: Exception) { message.value = "No se pudo confirmar el cambio en Firebase: ${e.localizedMessage}. Revisa la conexión antes de reintentar." }
+            catch (e: Exception) { message.value = "No se pudo guardar el cambio en el móvil: ${e.localizedMessage}." }
             finally { busy.value = false }
         }
     }
